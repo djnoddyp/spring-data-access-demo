@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/springdataaccessdemo.iml" filepath="$PROJECT_DIR$/springdataaccessdemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-data-access-demo.iml" filepath="$PROJECT_DIR$/spring-data-access-demo.iml" />
     </modules>
   </component>
 </project>

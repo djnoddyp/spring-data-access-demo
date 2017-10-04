@@ -24,19 +24,15 @@ public class ResidentDAO {
     public Resident findResidentById(int id) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         Resident resident = jdbcTemplate.queryForObject(
-                "SELECT * FROM RESIDENT WHERE RES_ID = ?",
+                "SELECT * FROM resident WHERE res_id = ?",
                 new Object[]{1234},
-                new RowMapper<Resident>() {
-                    @Override
-                    public Resident mapRow(ResultSet resultSet, int i) throws SQLException {
-                        Resident resident1 = new Resident();
-                        resident1.setName(resultSet.getString("name"));
-                        resident1.setAddress(resultSet.getString("address"));
-                        return resident1;
-                    }
+                (resultSet, i) -> {
+                    Resident resident1 = new Resident();
+                    resident1.setName(resultSet.getString("name"));
+                    resident1.setAddress(resultSet.getString("address"));
+                    return resident1;
                 }
         );
-
         return resident;
     }
 
