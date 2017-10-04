@@ -4,3 +4,22 @@ CREATE TABLE resident ( RES_ID INT(10) NOT NULL AUTO_INCREMENT, NAME VARCHAR(100
 2017-10-03 15:45:12 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: Table "RESIDENT" already exists; SQL statement:
 CREATE TABLE resident ( RES_ID INT(10) NOT NULL AUTO_INCREMENT, NAME VARCHAR(100) NOT NULL, ADDRESS VARCHAR(100) NOT NULL, PRIMARY KEY (RES_ID) ) [42101-196]
+2017-10-04 17:14:40 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Column "id" not found [42122-196]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:345)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.jdbc.JdbcResultSet.getColumnIndex(JdbcResultSet.java:3154)
+	at org.h2.jdbc.JdbcResultSet.get(JdbcResultSet.java:3246)
+	at org.h2.jdbc.JdbcResultSet.getInt(JdbcResultSet.java:350)
+	at patrick.dao.ResidentDAO.lambda$findResidentById$0(ResidentDAO.java:28)
+	at org.springframework.jdbc.core.RowMapperResultSetExtractor.extractData(RowMapperResultSetExtractor.java:93)
+	at org.springframework.jdbc.core.RowMapperResultSetExtractor.extractData(RowMapperResultSetExtractor.java:60)
+	at org.springframework.jdbc.core.JdbcTemplate$1.doInPreparedStatement(JdbcTemplate.java:697)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:633)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:684)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:716)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:726)
+	at org.springframework.jdbc.core.JdbcTemplate.queryForObject(JdbcTemplate.java:794)
+	at patrick.dao.ResidentDAO.findResidentById(ResidentDAO.java:34)
+	at patrick.Application.main(Application.java:21)
