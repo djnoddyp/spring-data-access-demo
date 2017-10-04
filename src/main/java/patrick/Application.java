@@ -18,7 +18,7 @@ public class Application {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
         dataSource = (DataSource) ctx.getBean("dataSource");
         initialiseDatabase(dataSource);
-        Resident resident = new ResidentDAO(dataSource).findResidentById(305);
+        Resident resident = new ResidentDAO(dataSource).findResidentById(3055);
         System.out.println("Found: " + resident.getName());
     }
 

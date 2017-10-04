@@ -15,6 +15,7 @@ public class AppConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.h2.Driver");
+        // not sure why this url works but it does
         dataSource.setUrl("jdbc:h2:./test");
         dataSource.setUsername("sa");
         dataSource.setPassword("sa");
