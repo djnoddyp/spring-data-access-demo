@@ -11,6 +11,7 @@ import org.h2.Driver;
 @Configuration
 public class AppConfig {
 
+    // Configure an embedded H2 db
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

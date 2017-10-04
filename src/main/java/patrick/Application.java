@@ -18,8 +18,19 @@ public class Application {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
         dataSource = (DataSource) ctx.getBean("dataSource");
         initialiseDatabase(dataSource);
-        Resident resident = new ResidentDAO(dataSource).findResidentById(3055);
+
+        // Retrieve a resident
+        ResidentDAO residentDAO = new ResidentDAO(dataSource);
+        Resident resident = residentDAO.findResidentById(3055);
         System.out.println("Found: " + resident.getName());
+
+        // Create and save a resident and then retrieve
+        Resident sam = new Resident();
+        sam.setId(9876);
+        sam.setName("Sam Losco");
+        sam.setAddress("15 Cave Street");
+        residentDAO.saveResident(sam);
+        System.out.println("Found: " + residentDAO.findResidentById(9876).getName());
     }
 
     private static void initialiseDatabase(DataSource dataSource) {

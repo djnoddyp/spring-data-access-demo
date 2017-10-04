@@ -15,17 +15,18 @@ import java.util.Optional;
 public class ResidentDAO {
 
     DataSource dataSource;
+    JdbcTemplate jdbcTemplate;
 
     @Autowired
     public ResidentDAO(DataSource dataSource) {
         this.dataSource = dataSource;
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     public Resident findResidentById(int id) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         Resident resident = jdbcTemplate.queryForObject(
                 "SELECT * FROM resident WHERE res_id = ?",
-                new Object[]{1234},
+                new Object[]{id},
                 (resultSet, i) -> {
                     Resident resident1 = new Resident();
                     resident1.setName(resultSet.getString("name"));
@@ -34,6 +35,14 @@ public class ResidentDAO {
                 }
         );
         return resident;
+    }
+
+    public void saveResident(Resident resident) {
+        jdbcTemplate.update(
+                "INSERT INTO resident (res_id, name, address) VALUES (?, ?, ?)",
+                resident.getId(),
+                resident.getName(),
+                resident.getAddress());
     }
 
 }
