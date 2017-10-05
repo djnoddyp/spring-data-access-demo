@@ -12,11 +12,12 @@ import java.util.Map;
 
 public class ResidentDAO {
 
+    @Autowired
     DataSource dataSource;
     JdbcTemplate jdbcTemplate;
+
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Autowired
     public ResidentDAO(DataSource dataSource) {
         this.dataSource = dataSource;
         jdbcTemplate = new JdbcTemplate(dataSource);
