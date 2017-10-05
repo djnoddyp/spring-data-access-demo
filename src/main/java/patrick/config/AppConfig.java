@@ -1,50 +1,66 @@
 package patrick.config;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import patrick.dao.ResidentDAO;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
+@EnableTransactionManagement
 @PropertySource("/app.properties")
 public class AppConfig {
 
     @Autowired
     Environment env;
 
-    // Configure an embedded H2 db
-    // Note: DriverManagerDataSource is intended for testing only,
-    // will perform poorly in a prod env
+    // Embedded database builder example - HSQLDB
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.h2.Driver");
-        // not sure why this url works but it does
-        dataSource.setUrl("jdbc:h2:./test");
-        dataSource.setUsername("${jdbc.username}");
-        dataSource.setPassword("${jdbc.password}");
-        dataSource.setUsername(env.getProperty("jdbc.username"));
-        dataSource.setPassword(env.getProperty("jdbc.password"));
-        return dataSource;
+        return new EmbeddedDatabaseBuilder()
+                .generateUniqueName(true)
+                .setType(EmbeddedDatabaseType.HSQL)
+                .setScriptEncoding("UTF-8")
+                .ignoreFailedDrops(true)
+                .addScripts("/sql/test-schema.sql", "/sql/test-data.sql")
+                .build();
     }
 
-    // Embedded database builder example - HSQLDB
-//    @Bean
-//    public DataSource dataSource() {
-//        return new EmbeddedDatabaseBuilder()
-//                .generateUniqueName(true)
-//                .setType(EmbeddedDatabaseType.HSQL)
-//                .setScriptEncoding("UTF-8")
-//                .ignoreFailedDrops(true)
-//                .addScripts("/sql/test-schema.sql", "/sql/test-data.sql")
-//                .build();
-//    }
+    @Bean
+    public LocalSessionFactoryBean sessionFactoryBean() {
+        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+        sessionFactoryBean.setDataSource(dataSource());
+        sessionFactoryBean.setHibernateProperties(getHibernateProperties());
+        return sessionFactoryBean;
+    }
+
+    private Properties getHibernateProperties() {
+        Properties props = new Properties();
+        props.put(AvailableSettings.DIALECT, env.getProperty("hibernate.dialect"));
+        props.put(AvailableSettings.SHOW_SQL, env.getProperty("hibernate.show_sql"));
+        props.put(AvailableSettings.HBM2DDL_AUTO, env.getProperty("hibernate.hbm2ddl.auto"));
+        props.put(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS,
+                env.getProperty("hibernate.current.session.context.class"));
+        return props;
+    }
+
+    @Bean
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory);
+        return transactionManager;
+    }
 
 }
