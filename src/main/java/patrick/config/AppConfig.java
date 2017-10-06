@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -14,12 +15,14 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import patrick.dao.ResidentDAO;
+import patrick.model.Resident;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
+@ComponentScan(basePackages = "patrick")
 @PropertySource("/app.properties")
 public class AppConfig {
 
@@ -39,11 +42,12 @@ public class AppConfig {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactoryBean() {
-        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactoryBean.setDataSource(dataSource());
-        sessionFactoryBean.setHibernateProperties(getHibernateProperties());
-        return sessionFactoryBean;
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setHibernateProperties(getHibernateProperties());
+        sessionFactory.setAnnotatedClasses(Resident.class);
+        return sessionFactory;
     }
 
     private Properties getHibernateProperties() {
@@ -51,16 +55,16 @@ public class AppConfig {
         props.put(AvailableSettings.DIALECT, env.getProperty("hibernate.dialect"));
         props.put(AvailableSettings.SHOW_SQL, env.getProperty("hibernate.show_sql"));
         props.put(AvailableSettings.HBM2DDL_AUTO, env.getProperty("hibernate.hbm2ddl.auto"));
-        props.put(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS,
-                env.getProperty("hibernate.current.session.context.class"));
         return props;
     }
 
     @Bean
+    @Autowired
     public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory);
         return transactionManager;
     }
+
 
 }
