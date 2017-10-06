@@ -15,7 +15,7 @@ public class Application {
     public static void main(String[] args) {
         // Create app context and DB
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
-        SessionFactory sessionFactory = (SessionFactory) ctx.getBean("sessionFactoryBean");
+        SessionFactory sessionFactory = (SessionFactory) ctx.getBean("mySessionfactory");
         ResidentDAO residentDAO = new ResidentDAO(sessionFactory);
 
         // List all residents

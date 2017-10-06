@@ -7,13 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import patrick.dao.ResidentDAO;
+import patrick.model.Resident;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -39,10 +38,11 @@ public class AppConfig {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactoryBean() {
+    public LocalSessionFactoryBean mySessionfactory() {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
         sessionFactoryBean.setDataSource(dataSource());
         sessionFactoryBean.setHibernateProperties(getHibernateProperties());
+        sessionFactoryBean.setAnnotatedClasses(Resident.class);
         return sessionFactoryBean;
     }
 
@@ -51,8 +51,8 @@ public class AppConfig {
         props.put(AvailableSettings.DIALECT, env.getProperty("hibernate.dialect"));
         props.put(AvailableSettings.SHOW_SQL, env.getProperty("hibernate.show_sql"));
         props.put(AvailableSettings.HBM2DDL_AUTO, env.getProperty("hibernate.hbm2ddl.auto"));
-        props.put(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS,
-                env.getProperty("hibernate.current.session.context.class"));
+//        props.put(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS,
+//                env.getProperty("hibernate.current.session.context.class"));
         return props;
     }
 
