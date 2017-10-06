@@ -8,13 +8,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import patrick.dao.ResidentDAO;
 import patrick.model.Resident;
 
 import javax.sql.DataSource;
@@ -65,6 +63,5 @@ public class AppConfig {
         transactionManager.setSessionFactory(sessionFactory);
         return transactionManager;
     }
-
-
+    
 }
