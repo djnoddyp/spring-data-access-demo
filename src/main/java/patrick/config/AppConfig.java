@@ -56,6 +56,7 @@ public class AppConfig {
         return props;
     }
 
+    // Needed for Hibernate
     @Bean
     @Autowired
     public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
